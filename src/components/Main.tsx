@@ -3,8 +3,29 @@ import Image from 'next/image'
 import foodPadding from '../../public/images/cutout-food-padding.png'
 import foodMobile from '../../public/images/cutout-food.png'
 import Logo from './Logo'
+import axios from 'axios'
+
 
 const Main = () => {
+
+// Here we will handle the state of the API request. First make a modal where you can select and deselect the amount of queries you can perform. (FoodSelection.tsx)
+// Save the state using a save button to lock in the API request.
+// Once the request is made, three cards can be made.(FoodCard.tsx) If the user would like to try a different set, they can press the button and it will retrigger the request.
+
+
+//TEST API CALL
+    let apiEndpoint = `https://api.spoonacular.com/recipes/716429/information?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&includeNutrition=true`
+
+    async function getSomething() {
+        try {
+            const response = await axios.get(apiEndpoint)
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+//
+
     return (
         <div>
             <div>
@@ -17,7 +38,7 @@ const Main = () => {
                     <Logo />
                 </div>
                 <div className='flex justify-center items-center rounded-lg p-2 border border-black max-w-[200px] mx-auto cursor-pointer'>
-                    <p>Test out the API</p>
+                    <p onClick={getSomething}>Test out the API</p>
                 </div>
             </div>
             <div>
@@ -37,5 +58,3 @@ const Main = () => {
 }
 
 export default Main
-
-// #cbefa4
