@@ -4,6 +4,7 @@ import foodPadding from '../../public/images/cutout-food-padding.png'
 import foodMobile from '../../public/images/cutout-food.png'
 import Logo from './Logo'
 import axios from 'axios'
+import CheckedSelect from './CheckedSelect'
 
 
 const Main = () => {
@@ -34,7 +35,7 @@ const Main = () => {
     return (
         <div>
             <div>
-                <div className='py-6 flex flex-col md:flex-row justify-around items-center text-center md:text-left'>
+                <div className='py-6 px-8 flex flex-col md:flex-row justify-around items-center text-center md:text-left'>
                     <div>
                         <h1 className='text-[#183618] text-7xl font-bold lg:max-w-[500px] w-full'>
                             Find your next meal.
@@ -60,8 +61,13 @@ const Main = () => {
             </div>
 
             {/* modal */}
-            <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : ''}>
-                <p>Modal here</p>
+            <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : 'hidden'}>
+                <div className='bg-white/70 w-fit h-fit'>
+                    <h1>Customize your options</h1>
+                    <div>
+                        <CheckedSelect />
+                    </div>
+                </div>
             </div>
         </div>
     )
