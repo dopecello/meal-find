@@ -14,7 +14,7 @@ const Logo = () => {
                     className='hidden md:block'
                 />
             </div>
-            <div className='px-6 py-2 z-10 md:hidden flex justify-center sm:justify-end w-full'>
+            <div className='px-6 py-2 z-10 md:hidden flex justify-center w-full'>
                 <Image
                     src={LogoImg}
                     alt='The MealFind logo'
