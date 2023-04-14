@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
 
 const CheckedSelect: React.FC = () => {
-    const [isCuisineEnabled, setisCuisineEnabled] = useState<boolean>(false);
-    const [isDietEnabled, setisDietEnabled] = useState<boolean>(false);
+
+    const [selectedCuisines, setSelectedCuisines] = useState<Record<string, boolean>>({});
+    const [selectedDiets, setSelectedDiets] = useState<Record<string, boolean>>({});
     const [selectedIntolerances, setSelectedIntolerances] = useState<Record<string, boolean>>({});
+    const [selectedMealTypes, setSelectedMealTypes] = useState<Record<string, boolean>>({});
+    const [maxReadyTime, setMaxReadyTime] = useState<number>()
+    const [isMaxReadyEnabled, setIsMaxReadyEnabled] = useState<boolean>(false);
+    const [maxCalories, setmaxCalories] = useState<number>()
+    const [isMaxCaloriesEnabled, setIsMaxCaloriesEnabled] = useState<boolean>(false);
 
+    const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedCuisines((prevSelectedCuisines) => ({
+            ...prevSelectedCuisines,
+            [event.target.value]: event.target.checked,
+        }));
+    };
 
-    const handleCuisine = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setisCuisineEnabled(event.target.checked);
+    const handleDiets = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedDiets((prevSelectedDiets) => ({
+            ...prevSelectedDiets,
+            [event.target.value]: event.target.checked,
+        }));
     };
-    const handleDiet = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setisDietEnabled(event.target.checked);
-    };
+
     const handleIntolerances = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedIntolerances((prevSelectedIntolerances) => ({
             ...prevSelectedIntolerances,
@@ -19,6 +32,28 @@ const CheckedSelect: React.FC = () => {
         }));
     };
 
+    const handleMealTypes = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedMealTypes((prevSelectedMealTypes) => ({
+            ...prevSelectedMealTypes,
+            [event.target.value]: event.target.checked,
+        }));
+    };
+
+    const handleMaxReady = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setMaxReadyTime(event.target.valueAsNumber)
+    }
+
+    const handleMaxReadyEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsMaxReadyEnabled(event.target.checked)
+    };
+
+    const handleMaxCalories = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setmaxCalories(event.target.valueAsNumber)
+    }
+
+    const handleMaxCaloriesEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsMaxCaloriesEnabled(event.target.checked)
+    };
 
     const cuisineOptions: { id: number, value: string, title: string }[] =
         [
@@ -35,7 +70,7 @@ const CheckedSelect: React.FC = () => {
 
     const dietOptions: { id: number, value: string, title: string }[] = [
         { id: 1, value: "gluten free", title: "Gluten-Free" }, { id: 2, value: "ketogenic", title: "Ketogenic" }, { id: 3, value: "vegetarian", title: "Vegetarian" },
-        { id: 4, value: "lacto-vegetarian", title: "Lacto-Vegetarian" }, { id: 5, value: "ovo-vegetarian", title: "Ovo-Vegetarian" }, { id: 6, value: "vegan", title: "vegan" },
+        { id: 4, value: "lacto-vegetarian", title: "Lacto-Vegetarian" }, { id: 5, value: "ovo-vegetarian", title: "Ovo-Vegetarian" }, { id: 6, value: "vegan", title: "Vegan" },
         { id: 7, value: "pescatarian", title: "Pescetarian" }, { id: 8, value: "paleo", title: "Paleo" }, { id: 9, value: "primal", title: "Primal" },
         { id: 10, value: "low FODMAP", title: "Low FODMAP" }, { id: 11, value: "whole30", title: "Whole30" }
     ]
@@ -46,41 +81,52 @@ const CheckedSelect: React.FC = () => {
         { id: 7, value: "sesame", title: "Sesame" }, { id: 8, value: "shellfish", title: "Shellfish" }, { id: 9, value: "soy", title: "Soy" },
         { id: 10, value: "sulfite", title: "Sulfite" }, { id: 11, value: "tree nut", title: "Tree Nut" }, { id: 12, value: "wheat", title: "Wheat" }
     ]
+
+    const mealTypeOptions: { id: number, value: string, title: string }[] = [
+        { id: 1, value: "main course", title: "Main Course" }, { id: 2, value: "side dish", title: "Side Dish" }, { id: 3, value: "dessert", title: "Dessert" },
+        { id: 4, value: "appetizer", title: "Appetizer" }, { id: 5, value: "breakfast", title: "Breakfast" }, { id: 6, value: "fingerfood", title: "Fingerfood" },
+        { id: 7, value: "snack", title: "Snack" },
+    ]
+
+    // const selectedIntoleranceValues = Object.entries(selectedIntolerances)
+    //     .filter(([_, isChecked]) => isChecked)
+    //     .map(([value, _]) => value);
+
     // need to check value inputs because I'm not sure about underscores, hyphens, or just whitespaces. Check before testing.
     return (
         <div>
             <h3>Check the checkbox to activate different parameters on your search result!</h3>
             <div>
-                <input
-                    type="checkbox"
-                    id="cuisine"
-                    name="cuisine-options"
-                    onChange={handleCuisine}
-                />
                 <h3>Cuisine:</h3>
-                <select disabled={!isCuisineEnabled}>
-                    {cuisineOptions.map(i => {
-                        return (
-                            <option value={i.value} key={i.id}>{i.title}</option>
-                        )
-                    })}
-                </select>
+                {cuisineOptions.map((i) => (
+                    <span key={i.id}>
+                        <input
+                            type="checkbox"
+                            id={`cuisine-${i.value}`}
+                            name="cuisines"
+                            value={i.value}
+                            checked={selectedCuisines[i.value] || false}
+                            onChange={handleCuisines}
+                        />
+                        <label htmlFor={`cuisine-${i.value}`}>{i.title}</label>
+                    </span>
+                ))}
             </div>
             <div>
-                <input
-                    type="checkbox"
-                    id="enable_select"
-                    name="toggle_select"
-                    onChange={handleDiet}
-                />
                 <h3>Diet:</h3>
-                <select disabled={!isDietEnabled}>
-                    {dietOptions.map(i => {
-                        return (
-                            <option value={i.value} key={i.id}>{i.title}</option>
-                        )
-                    })}
-                </select>
+                {dietOptions.map((i) => (
+                    <span key={i.id}>
+                        <input
+                            type="checkbox"
+                            id={`diet-${i.value}`}
+                            name="diets"
+                            value={i.value}
+                            checked={selectedDiets[i.value] || false}
+                            onChange={handleDiets}
+                        />
+                        <label htmlFor={`diet-${i.value}`}>{i.title}</label>
+                    </span>
+                ))}
             </div>
             <div>
                 <h3>Intolerances:</h3>
@@ -97,6 +143,42 @@ const CheckedSelect: React.FC = () => {
                         <label htmlFor={`intolerance-${i.value}`}>{i.title}</label>
                     </span>
                 ))}
+            </div>
+            <div>
+                <h3>Meal Types:</h3>
+                {mealTypeOptions.map((i) => (
+                    <span key={i.id}>
+                        <input
+                            type="checkbox"
+                            id={`mealType-${i.value}`}
+                            name="mealTypes"
+                            value={i.value}
+                            checked={selectedMealTypes[i.value] || false}
+                            onChange={handleMealTypes}
+                        />
+                        <label htmlFor={`mealType-${i.value}`}>{i.title}</label>
+                    </span>
+                ))}
+            </div>
+            <div>
+                <h3>Maximum Preparation Time &#40;mins&#41;:</h3>
+                <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled}/>
+                <input
+                    type="checkbox"
+                    id="enable_select"
+                    name="toggle_select"
+                    onChange={handleMaxReadyEnabler}
+                />
+            </div>
+            <div>
+                <h3>Maximum Calories &#40;cals&#41;:</h3>
+                <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled}/>
+                <input
+                    type="checkbox"
+                    id="enable_select"
+                    name="toggle_select"
+                    onChange={handleMaxCaloriesEnabler}
+                />
             </div>
         </div >
     );
