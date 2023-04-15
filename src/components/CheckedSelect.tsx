@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 
-const CheckedSelect: React.FC = () => {
+interface CheckedSelectProps {
+    onSelectedValuesChanged: (values: {
+        cuisines: string[];
+        diets: string[];
+        intolerances: string[];
+        mealTypes: string[];
+        maxReadyTime?: number;
+        maxCalories?: number;
+    }) => void;
+}
+
+const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }) => {
 
     const [selectedCuisines, setSelectedCuisines] = useState<Record<string, boolean>>({});
     const [selectedDiets, setSelectedDiets] = useState<Record<string, boolean>>({});
@@ -11,48 +22,88 @@ const CheckedSelect: React.FC = () => {
     const [maxCalories, setmaxCalories] = useState<number>()
     const [isMaxCaloriesEnabled, setIsMaxCaloriesEnabled] = useState<boolean>(false);
 
-    const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedCuisines((prevSelectedCuisines) => ({
-            ...prevSelectedCuisines,
-            [event.target.value]: event.target.checked,
-        }));
+    const reportSelectedValues = () => {
+        onSelectedValuesChanged({
+            cuisines: Object.keys(selectedCuisines).filter((key) => selectedCuisines[key]),
+            diets: Object.keys(selectedDiets).filter((key) => selectedDiets[key]),
+            intolerances: Object.keys(selectedIntolerances).filter((key) => selectedIntolerances[key]),
+            mealTypes: Object.keys(selectedMealTypes).filter((key) => selectedMealTypes[key]),
+            maxReadyTime: isMaxReadyEnabled ? maxReadyTime : undefined,
+            maxCalories: isMaxCaloriesEnabled ? maxCalories : undefined,
+        });
     };
 
+    const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedCuisines((prevSelectedCuisines) => {
+            const newSelectedCuisines = {
+                ...prevSelectedCuisines,
+                [event.target.value]: event.target.checked
+            };
+            return newSelectedCuisines;
+        })
+        reportSelectedValues();
+    };
+
+
     const handleDiets = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDiets((prevSelectedDiets) => ({
-            ...prevSelectedDiets,
-            [event.target.value]: event.target.checked,
-        }));
+        setSelectedDiets((prevSelectedDiets) => {
+            const newSelectedDiets = {
+                ...prevSelectedDiets,
+                [event.target.value]: event.target.checked
+            }
+            return newSelectedDiets;
+        });
+        reportSelectedValues();
     };
 
     const handleIntolerances = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedIntolerances((prevSelectedIntolerances) => ({
-            ...prevSelectedIntolerances,
-            [event.target.value]: event.target.checked,
-        }));
+        setSelectedIntolerances((prevSelectedIntolerances) => {
+            const newSelectedIntolerances = {
+                ...prevSelectedIntolerances,
+                [event.target.value]: event.target.checked
+            }
+            return newSelectedIntolerances;
+        });
+        reportSelectedValues();
     };
 
     const handleMealTypes = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedMealTypes((prevSelectedMealTypes) => ({
-            ...prevSelectedMealTypes,
-            [event.target.value]: event.target.checked,
-        }));
+        setSelectedMealTypes((prevSelectedMealTypes) => {
+            const newSelectedMealTypes = {
+                ...prevSelectedMealTypes,
+                [event.target.value]: event.target.checked
+            }
+            return newSelectedMealTypes;
+        });
+        reportSelectedValues();
     };
 
     const handleMaxReady = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMaxReadyTime(event.target.valueAsNumber)
+        setMaxReadyTime(event.target.valueAsNumber);
+        setTimeout(() => {  // This is a hack to make sure the state is updated before the reportSelectedValues is called
+            reportSelectedValues();
+        }, 0);
     }
 
     const handleMaxReadyEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsMaxReadyEnabled(event.target.checked)
+        setIsMaxReadyEnabled(event.target.checked);
+        setTimeout(() => {
+            reportSelectedValues();
+        }, 0);
     };
 
     const handleMaxCalories = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setmaxCalories(event.target.valueAsNumber)
+        setmaxCalories(event.target.valueAsNumber);
+        setTimeout(() => {
+            reportSelectedValues();
+        }, 0);
     }
 
     const handleMaxCaloriesEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsMaxCaloriesEnabled(event.target.checked)
+        setIsMaxCaloriesEnabled(event.target.checked);
+        setTimeout(() => {
+            reportSelectedValues();
+        }, 0);
     };
 
     const cuisineOptions: { id: number, value: string, title: string }[] =
@@ -88,9 +139,6 @@ const CheckedSelect: React.FC = () => {
         { id: 7, value: "snack", title: "Snack" },
     ]
 
-    // const selectedIntoleranceValues = Object.entries(selectedIntolerances)
-    //     .filter(([_, isChecked]) => isChecked)
-    //     .map(([value, _]) => value);
 
     // need to check value inputs because I'm not sure about underscores, hyphens, or just whitespaces. Check before testing.
     return (
@@ -162,7 +210,7 @@ const CheckedSelect: React.FC = () => {
             </div>
             <div>
                 <h3>Maximum Preparation Time &#40;mins&#41;:</h3>
-                <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled}/>
+                <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled} />
                 <input
                     type="checkbox"
                     id="enable_select"
@@ -172,7 +220,7 @@ const CheckedSelect: React.FC = () => {
             </div>
             <div>
                 <h3>Maximum Calories &#40;cals&#41;:</h3>
-                <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled}/>
+                <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled} />
                 <input
                     type="checkbox"
                     id="enable_select"
