@@ -142,91 +142,109 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
 
     // need to check value inputs because I'm not sure about underscores, hyphens, or just whitespaces. Check before testing.
     return (
-        <div>
-            <h3>Check the checkbox to activate different parameters on your search result!</h3>
-            <div>
-                <h3>Cuisine:</h3>
-                {cuisineOptions.map((i) => (
-                    <span key={i.id}>
+        <div className='bg-white px-8 py-6 rounded-lg shadow-md'>
+            <div className='grid grid-cols-1 gap-2'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+                    <h3 className='font-semibold mb-2'>Cuisine:</h3>
+                    {cuisineOptions.map((i) => (
+                        <div key={i.id} className='flex items-center mb-2'>
+                            <input
+                                type="checkbox"
+                                id={`cuisine-${i.value}`}
+                                name="cuisines"
+                                value={i.value}
+                                checked={selectedCuisines[i.value] || false}
+                                onChange={handleCuisines}
+                                className='rounded'
+                            />
+                            <label htmlFor={`cuisine-${i.value}`} className='ml-2'>
+                                {i.title}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+                    <h3 className='font-semibold mb-2'>Diet:</h3>
+                    {dietOptions.map((i) => (
+                        <div key={i.id} className='flex items-center mb-2'>
+                            <input
+                                type="checkbox"
+                                id={`diet-${i.value}`}
+                                name="diets"
+                                value={i.value}
+                                checked={selectedDiets[i.value] || false}
+                                onChange={handleDiets}
+                                className='rounded'
+                            />
+                            <label htmlFor={`diet-${i.value}`} className='ml-2'>
+                                {i.title}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+                    <h3 className='font-semibold mb-2'>Intolerances:</h3>
+                    {intoleranceOptions.map((i) => (
+                        <div key={i.id} className='flex items-center mb-2'>
+                            <input
+                                type="checkbox"
+                                id={`intolerance-${i.value}`}
+                                name="intolerances"
+                                value={i.value}
+                                checked={selectedIntolerances[i.value] || false}
+                                onChange={handleIntolerances}
+                                className='rounded'
+                            />
+                            <label htmlFor={`intolerance-${i.value}`} className='ml-2'>{i.title}</label>
+                        </div>
+                    ))}
+                </div>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+                    <h3 className='font-semibold mb-2'>Meal Types:</h3>
+                    {mealTypeOptions.map((i) => (
+                        <div key={i.id} className='flex items-center mb-2'>
+                            <input
+                                type="checkbox"
+                                id={`mealType-${i.value}`}
+                                name="mealTypes"
+                                value={i.value}
+                                checked={selectedMealTypes[i.value] || false}
+                                onChange={handleMealTypes}
+                                className='rounded'
+                            />
+                            <label htmlFor={`mealType-${i.value}`} className='ml-2'>
+                                {i.title}
+                            </label>
+                        </div>
+                    ))}
+                </div>
+                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+                    <div>
+                        <h3 className='font-semibold mb-2'>Maximum Preparation Time &#40;mins&#41;:</h3>
                         <input
                             type="checkbox"
-                            id={`cuisine-${i.value}`}
-                            name="cuisines"
-                            value={i.value}
-                            checked={selectedCuisines[i.value] || false}
-                            onChange={handleCuisines}
+                            id="enable_select"
+                            name="toggle_select"
+                            onChange={handleMaxReadyEnabler}
                         />
-                        <label htmlFor={`cuisine-${i.value}`}>{i.title}</label>
-                    </span>
-                ))}
-            </div>
-            <div>
-                <h3>Diet:</h3>
-                {dietOptions.map((i) => (
-                    <span key={i.id}>
+                        <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled} className='ml-2 border-black border' />
+                    </div>
+
+                    <div>
+                        <h3 className='font-semibold mb-2'>Maximum Calories &#40;cals&#41;:</h3>
                         <input
                             type="checkbox"
-                            id={`diet-${i.value}`}
-                            name="diets"
-                            value={i.value}
-                            checked={selectedDiets[i.value] || false}
-                            onChange={handleDiets}
+                            id="enable_select"
+                            name="toggle_select"
+                            onChange={handleMaxCaloriesEnabler}
                         />
-                        <label htmlFor={`diet-${i.value}`}>{i.title}</label>
-                    </span>
-                ))}
-            </div>
-            <div>
-                <h3>Intolerances:</h3>
-                {intoleranceOptions.map((i) => (
-                    <span key={i.id}>
-                        <input
-                            type="checkbox"
-                            id={`intolerance-${i.value}`}
-                            name="intolerances"
-                            value={i.value}
-                            checked={selectedIntolerances[i.value] || false}
-                            onChange={handleIntolerances}
-                        />
-                        <label htmlFor={`intolerance-${i.value}`}>{i.title}</label>
-                    </span>
-                ))}
-            </div>
-            <div>
-                <h3>Meal Types:</h3>
-                {mealTypeOptions.map((i) => (
-                    <span key={i.id}>
-                        <input
-                            type="checkbox"
-                            id={`mealType-${i.value}`}
-                            name="mealTypes"
-                            value={i.value}
-                            checked={selectedMealTypes[i.value] || false}
-                            onChange={handleMealTypes}
-                        />
-                        <label htmlFor={`mealType-${i.value}`}>{i.title}</label>
-                    </span>
-                ))}
-            </div>
-            <div>
-                <h3>Maximum Preparation Time &#40;mins&#41;:</h3>
-                <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled} />
-                <input
-                    type="checkbox"
-                    id="enable_select"
-                    name="toggle_select"
-                    onChange={handleMaxReadyEnabler}
-                />
-            </div>
-            <div>
-                <h3>Maximum Calories &#40;cals&#41;:</h3>
-                <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled} />
-                <input
-                    type="checkbox"
-                    id="enable_select"
-                    name="toggle_select"
-                    onChange={handleMaxCaloriesEnabler}
-                />
+                        <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled} className='ml-2 border-black border' />
+                    </div>
+                </div>
+
             </div>
         </div >
     );

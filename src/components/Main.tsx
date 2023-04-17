@@ -71,8 +71,10 @@ const Main = () => {
 
             {/* modal */}
             <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : 'hidden'}>
-                <div className='bg-white/70 w-fit h-fit overflow-auto max-h-screen py-4'>
-                    <h1>Customize your options</h1>
+                <div className='bg-white/70 w-full h-screen overflow-auto max-h-screen py-4'>
+                    <div className='flex justify-center mb-4 text-white'>
+                        <h1 className='flex justify-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
+                    </div>
                     <div>
                         <CheckedSelect onSelectedValuesChanged={
                             function (values:
@@ -83,8 +85,8 @@ const Main = () => {
                                 throw new Error('Function not implemented.')
                             }} />
                     </div>
-                    <div>
-                        <button onClick={getSomething}>Done</button>
+                    <div className='flex justify-center pt-4'>
+                        <button onClick={() => { getSomething(); handleFoodSearch(); }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
                     </div>
                 </div>
             </div>
