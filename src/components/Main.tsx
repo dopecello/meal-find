@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import foodPadding from '../../public/images/cutout-food-padding.png'
 import foodMobile from '../../public/images/cutout-food.png'
 import Logo from './Logo'
 import axios from 'axios'
 import CheckedSelect from './CheckedSelect'
+import useBodyClass from '@/hooks/useBodyClass'
 
 
 const Main = () => {
@@ -13,11 +14,19 @@ const Main = () => {
     // Save the state using a save button to lock in the API request.
     // Once the request is made, three cards can be made.(FoodCard.tsx) If the user would like to try a different set, they can press the button and it will retrigger the request.
     const [modal, setModal] = useState(false)
+    const [bodyNoScroll, setBodyNoScroll] = useState(false)
 
 
     const handleFoodSearch = () => {
         setModal(!modal)
     }
+
+    useEffect(() => {
+        setBodyNoScroll(modal)
+    }, [modal])
+
+    useBodyClass('overflow-hidden', bodyNoScroll);
+    useBodyClass('h-full', bodyNoScroll); //custom hook to add class to body
 
     //TEST API CALL
     let apiEndpoint = `https://api.spoonacular.com/recipes/716429/information?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&includeNutrition=true`
@@ -34,7 +43,7 @@ const Main = () => {
 
     return (
         <div>
-            <div>
+            <div className={modal ? 'no-scroll scrol' : ''}>
                 <div className='py-6 px-8 flex flex-col md:flex-row justify-around items-center text-center md:text-left'>
                     <div>
                         <h1 className='text-[#183618] text-7xl font-bold lg:max-w-[500px] w-full'>
@@ -62,10 +71,20 @@ const Main = () => {
 
             {/* modal */}
             <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : 'hidden'}>
-                <div className='bg-white/70 w-fit h-fit'>
+                <div className='bg-white/70 w-fit h-fit overflow-auto max-h-screen py-4'>
                     <h1>Customize your options</h1>
                     <div>
-                        <CheckedSelect />
+                        <CheckedSelect onSelectedValuesChanged={
+                            function (values:
+                                {
+                                    cuisines: string[]; diets: string[]; intolerances: string[];
+                                    mealTypes: string[]; maxReadyTime?: number | undefined; maxCalories?: number | undefined
+                                }): void {
+                                throw new Error('Function not implemented.')
+                            }} />
+                    </div>
+                    <div>
+                        <button onClick={getSomething}>Done</button>
                     </div>
                 </div>
             </div>
