@@ -43,17 +43,17 @@ const Main = () => {
 
     return (
         <div>
-            <div className={modal ? 'no-scroll scrol' : ''}>
+            <div>
                 <div className='py-6 px-8 flex flex-col md:flex-row justify-around items-center text-center md:text-left'>
                     <div>
-                        <h1 className='text-[#183618] text-7xl font-bold lg:max-w-[500px] w-full'>
+                        <h1 className='text-dark-green text-7xl font-bold lg:max-w-[500px] w-full'>
                             Find your next meal.
                         </h1>
                     </div>
                     <Logo />
                 </div>
-                <div className='flex justify-center items-center rounded-lg p-2 border border-black max-w-[200px] mx-auto cursor-pointer'>
-                    <p onClick={handleFoodSearch}>Switch the modal</p>
+                <div className='flex justify-center items-center rounded-lg p-2 border-4 border-black max-w-[200px] mx-auto cursor-pointer bg-dark-green'>
+                    <p onClick={handleFoodSearch} className='font-semibold text-white'>Search Recipes</p>
                 </div>
             </div>
             <div>
@@ -77,11 +77,11 @@ const Main = () => {
                     </div>
                     <div>
                         <CheckedSelect onSelectedValuesChanged={
-                            function (values:
-                                {
-                                    cuisines: string[]; diets: string[]; intolerances: string[];
-                                    mealTypes: string[]; maxReadyTime?: number | undefined; maxCalories?: number | undefined
-                                }): void {
+                            function (values: {
+                                cuisines: string[]; diets: string[]; intolerances: string[];
+                                mealTypes: string[]; maxReadyTime?: number | undefined;
+                                maxCalories?: number | undefined
+                            }): void {
                                 throw new Error('Function not implemented.')
                             }} />
                     </div>

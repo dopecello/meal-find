@@ -142,10 +142,10 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
 
     // need to check value inputs because I'm not sure about underscores, hyphens, or just whitespaces. Check before testing.
     return (
-        <div className='bg-white px-8 py-6 rounded-lg shadow-md'>
+        <div className='bg-white px-8 py-6 rounded-lg shadow-md mx-4'>
             <div className='grid grid-cols-1 gap-2'>
-                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
-                    <h3 className='font-semibold mb-2'>Cuisine:</h3>
+                <h3 className='font-semibold text-lg'>Cuisines:</h3>
+                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {cuisineOptions.map((i) => (
                         <div key={i.id} className='flex items-center mb-2'>
                             <input
@@ -163,9 +163,9 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                         </div>
                     ))}
                 </div>
-
-                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
-                    <h3 className='font-semibold mb-2'>Diet:</h3>
+                
+                <h3 className='font-semibold pt-4 text-lg'>Diet:</h3>
+                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {dietOptions.map((i) => (
                         <div key={i.id} className='flex items-center mb-2'>
                             <input
@@ -184,8 +184,8 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                     ))}
                 </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
-                    <h3 className='font-semibold mb-2'>Intolerances:</h3>
+                <h3 className='font-semibold pt-4 text-lg'>Intolerances:</h3>
+                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {intoleranceOptions.map((i) => (
                         <div key={i.id} className='flex items-center mb-2'>
                             <input
@@ -202,8 +202,8 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                     ))}
                 </div>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
-                    <h3 className='font-semibold mb-2'>Meal Types:</h3>
+                <h3 className='font-semibold pt-4 text-lg'>Meal Types:</h3>
+                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {mealTypeOptions.map((i) => (
                         <div key={i.id} className='flex items-center mb-2'>
                             <input
@@ -221,8 +221,12 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                         </div>
                     ))}
                 </div>
-                <div className='grid grid-cols-1 sm:grid-cols-2 pt-4'>
+
+                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 pt-4'>
                     <div>
+                        {/* spacer div */}
+                    </div>
+                    <div className='xl:col-start-2'>
                         <h3 className='font-semibold mb-2'>Maximum Preparation Time &#40;mins&#41;:</h3>
                         <input
                             type="checkbox"
@@ -233,7 +237,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                         <input type="number" onChange={handleMaxReady} disabled={!isMaxReadyEnabled} className='ml-2 border-black border' />
                     </div>
 
-                    <div>
+                    <div className='xl:col-start-3'>
                         <h3 className='font-semibold mb-2'>Maximum Calories &#40;cals&#41;:</h3>
                         <input
                             type="checkbox"
@@ -244,7 +248,9 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                         <input type="number" onChange={handleMaxCalories} disabled={!isMaxCaloriesEnabled} className='ml-2 border-black border' />
                     </div>
                 </div>
-
+                <div>
+                    {/* spacer div */}
+                </div>
             </div>
         </div >
     );
