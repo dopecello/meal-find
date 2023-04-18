@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import foodPadding from '../../public/images/cutout-food-padding.png'
 import foodMobile from '../../public/images/cutout-food.png'
@@ -15,6 +15,14 @@ const Main = () => {
     // Once the request is made, three cards can be made.(FoodCard.tsx) If the user would like to try a different set, they can press the button and it will retrigger the request.
     const [modal, setModal] = useState(false)
     const [bodyNoScroll, setBodyNoScroll] = useState(false)
+    const [selectedValues, setSelectedValues] = useState<SelectedVals>({
+        cuisines: [],
+        diets: [],
+        intolerances: [],
+        mealTypes: [],
+        maxReadyTime: undefined,
+        maxCalories: undefined,
+    })
 
 
     const handleFoodSearch = () => {
@@ -28,15 +36,40 @@ const Main = () => {
     useBodyClass('overflow-hidden', bodyNoScroll);
     useBodyClass('h-full', bodyNoScroll); //custom hook to add class to body
 
-    //TEST API CALL
-    let apiEndpoint = `https://api.spoonacular.com/recipes/716429/information?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&includeNutrition=true`
+    const onSelectedValuesChanged = useCallback((values: SelectedVals) => {
+        setSelectedValues(values);
+      }, []);
 
-    async function getSomething() {
+    //TEST API CALL
+    const getSomething = async () => {
+
+        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=3`
+
+        if (selectedValues.cuisines.length > 0) {
+            apiEndpoint += `&cuisine=${selectedValues.cuisines.join(',')}`
+        }
+        if (selectedValues.diets.length > 0) {
+            apiEndpoint += `&diet=${selectedValues.diets.join(',')}`
+        }
+        if (selectedValues.intolerances.length > 0) {
+            apiEndpoint += `&intolerances=${selectedValues.intolerances.join(',')}`
+        }
+        if (selectedValues.mealTypes.length > 0) {
+            apiEndpoint += `&type=${selectedValues.mealTypes.join(',')}`
+        }
+        if (selectedValues.maxReadyTime) {
+            apiEndpoint += `&maxReadyTime=${selectedValues.maxReadyTime}`
+        }
+        if (selectedValues.maxCalories) {
+            apiEndpoint += `&maxCalories=${selectedValues.maxCalories}`
+        }
+        console.log(apiEndpoint)
+
         try {
-            const response = await axios.get(apiEndpoint)
-            console.log(response)
+            const response = await axios.get(apiEndpoint);
+            console.log(response);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
     //
@@ -76,10 +109,13 @@ const Main = () => {
                         <h1 className='flex justify-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
                     </div>
                     <div>
-                        <CheckedSelect onSelectedValuesChanged={(values) => { console.log(values) }} />
+                        <CheckedSelect onSelectedValuesChanged={onSelectedValuesChanged} />
                     </div>
                     <div className='flex justify-center pt-4'>
-                        <button onClick={() => { handleFoodSearch() }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
+                        <button onClick={async () => {
+                            await getSomething();
+                            handleFoodSearch();
+                        }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
                     </div>
                 </div>
             </div>

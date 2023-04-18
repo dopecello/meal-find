@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface CheckedSelectProps {
     onSelectedValuesChanged: (values: {
@@ -84,7 +84,11 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     };
 
     const handleMaxReady = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMaxReadyTime(event.target.valueAsNumber);
+        const value = event.target.valueAsNumber;
+        if(isNaN(value)) {
+            setMaxReadyTime(undefined)
+        }
+        setMaxReadyTime(value);
     }
 
     const handleMaxReadyEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +96,11 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     };
 
     const handleMaxCalories = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setmaxCalories(event.target.valueAsNumber);
+        const value = event.target.valueAsNumber;
+        if(isNaN(value)) {
+            setmaxCalories(undefined)
+        }
+        setmaxCalories(value);
     }
 
     const handleMaxCaloriesEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
