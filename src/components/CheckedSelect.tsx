@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface CheckedSelectProps {
     onSelectedValuesChanged: (values: {
@@ -22,16 +22,22 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     const [maxCalories, setmaxCalories] = useState<number>()
     const [isMaxCaloriesEnabled, setIsMaxCaloriesEnabled] = useState<boolean>(false);
 
-    const reportSelectedValues = () => {
-        onSelectedValuesChanged({
-            cuisines: Object.keys(selectedCuisines).filter((key) => selectedCuisines[key]),
-            diets: Object.keys(selectedDiets).filter((key) => selectedDiets[key]),
-            intolerances: Object.keys(selectedIntolerances).filter((key) => selectedIntolerances[key]),
-            mealTypes: Object.keys(selectedMealTypes).filter((key) => selectedMealTypes[key]),
-            maxReadyTime: isMaxReadyEnabled ? maxReadyTime : undefined,
-            maxCalories: isMaxCaloriesEnabled ? maxCalories : undefined,
-        });
-    };
+
+    useEffect(() => {
+        const reportSelectedValues = () => {
+            onSelectedValuesChanged({
+                cuisines: Object.keys(selectedCuisines).filter((key) => selectedCuisines[key]),
+                diets: Object.keys(selectedDiets).filter((key) => selectedDiets[key]),
+                intolerances: Object.keys(selectedIntolerances).filter((key) => selectedIntolerances[key]),
+                mealTypes: Object.keys(selectedMealTypes).filter((key) => selectedMealTypes[key]),
+                maxReadyTime: isMaxReadyEnabled ? maxReadyTime : undefined,
+                maxCalories: isMaxCaloriesEnabled ? maxCalories : undefined,
+            });
+        };
+        reportSelectedValues();
+    }, [selectedCuisines, selectedDiets, selectedIntolerances, selectedMealTypes, isMaxReadyEnabled, maxReadyTime, isMaxCaloriesEnabled, maxCalories, onSelectedValuesChanged]);
+    // For now, this works, but while dealing with this I saw a use case for useCallBack. I will have to look into that.
+
 
     const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedCuisines((prevSelectedCuisines) => {
@@ -41,9 +47,8 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
             };
             return newSelectedCuisines;
         })
-        reportSelectedValues();
-    };
 
+    };
 
     const handleDiets = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedDiets((prevSelectedDiets) => {
@@ -53,7 +58,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
             }
             return newSelectedDiets;
         });
-        reportSelectedValues();
+
     };
 
     const handleIntolerances = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +69,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
             }
             return newSelectedIntolerances;
         });
-        reportSelectedValues();
+
     };
 
     const handleMealTypes = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,66 +80,54 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
             }
             return newSelectedMealTypes;
         });
-        reportSelectedValues();
+
     };
 
     const handleMaxReady = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMaxReadyTime(event.target.valueAsNumber);
-        setTimeout(() => {  // This is a hack to make sure the state is updated before the reportSelectedValues is called
-            reportSelectedValues();
-        }, 0);
     }
 
     const handleMaxReadyEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsMaxReadyEnabled(event.target.checked);
-        setTimeout(() => {
-            reportSelectedValues();
-        }, 0);
     };
 
     const handleMaxCalories = (event: React.ChangeEvent<HTMLInputElement>) => {
         setmaxCalories(event.target.valueAsNumber);
-        setTimeout(() => {
-            reportSelectedValues();
-        }, 0);
     }
 
     const handleMaxCaloriesEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsMaxCaloriesEnabled(event.target.checked);
-        setTimeout(() => {
-            reportSelectedValues();
-        }, 0);
     };
 
     const cuisineOptions: { id: number, value: string, title: string }[] =
         [
             { id: 1, value: "african", title: "African" }, { id: 2, value: "american", title: "American" }, { id: 3, value: "british", title: "British" },
             { id: 4, value: "cajun", title: "Cajun" }, { id: 5, value: "caribbean", title: "Caribbean" }, { id: 6, value: "chinese", title: "Chinese" },
-            { id: 7, value: "eastern european", title: "Eastern European" }, { id: 8, value: "european", title: "European" }, { id: 9, value: "french", title: "French" },
+            { id: 7, value: "eastern%20european", title: "Eastern European" }, { id: 8, value: "european", title: "European" }, { id: 9, value: "french", title: "French" },
             { id: 10, value: "german", title: "German" }, { id: 11, value: "greek", title: "Greek" }, { id: 12, value: "indian", title: "Indian" },
             { id: 13, value: "irish", title: "Irish" }, { id: 14, value: "italian", title: "Italian" }, { id: 15, value: "japanese", title: "Japanese" },
-            { id: 16, value: "jewish", title: "Jewish" }, { id: 17, value: "korean", title: "Korean" }, { id: 18, value: "latin american", title: "Latin American" },
-            { id: 19, value: "mediterranean", title: "Mediterranean" }, { id: 20, value: "mexican", title: "Mexican" }, { id: 21, value: "middle eastern", title: "Middle Eastern" },
+            { id: 16, value: "jewish", title: "Jewish" }, { id: 17, value: "korean", title: "Korean" }, { id: 18, value: "latin%20american", title: "Latin American" },
+            { id: 19, value: "mediterranean", title: "Mediterranean" }, { id: 20, value: "mexican", title: "Mexican" }, { id: 21, value: "middle%20eastern", title: "Middle Eastern" },
             { id: 22, value: "nordic", title: "Nordic" }, { id: 23, value: "southern", title: "Southern" }, { id: 24, value: "spanish", title: "Spanish" },
             { id: 25, value: "thai", title: "Thai" }, { id: 26, value: "vietnamese", title: "Vietnamese" },
         ]
 
     const dietOptions: { id: number, value: string, title: string }[] = [
-        { id: 1, value: "gluten free", title: "Gluten-Free" }, { id: 2, value: "ketogenic", title: "Ketogenic" }, { id: 3, value: "vegetarian", title: "Vegetarian" },
+        { id: 1, value: "gluten%20free", title: "Gluten-Free" }, { id: 2, value: "ketogenic", title: "Ketogenic" }, { id: 3, value: "vegetarian", title: "Vegetarian" },
         { id: 4, value: "lacto-vegetarian", title: "Lacto-Vegetarian" }, { id: 5, value: "ovo-vegetarian", title: "Ovo-Vegetarian" }, { id: 6, value: "vegan", title: "Vegan" },
         { id: 7, value: "pescatarian", title: "Pescetarian" }, { id: 8, value: "paleo", title: "Paleo" }, { id: 9, value: "primal", title: "Primal" },
-        { id: 10, value: "low FODMAP", title: "Low FODMAP" }, { id: 11, value: "whole30", title: "Whole30" }
+        { id: 10, value: "low%20FODMAP", title: "Low FODMAP" }, { id: 11, value: "whole30", title: "Whole30" }
     ]
 
     const intoleranceOptions: { id: number, value: string, title: string }[] = [
         { id: 1, value: "dairy", title: "Dairy" }, { id: 2, value: "egg", title: "Egg" }, { id: 3, value: "gluten", title: "Gluten" },
         { id: 4, value: "grain", title: "Grain" }, { id: 5, value: "peanut", title: "Peanut" }, { id: 6, value: "seafood", title: "Seafood" },
         { id: 7, value: "sesame", title: "Sesame" }, { id: 8, value: "shellfish", title: "Shellfish" }, { id: 9, value: "soy", title: "Soy" },
-        { id: 10, value: "sulfite", title: "Sulfite" }, { id: 11, value: "tree nut", title: "Tree Nut" }, { id: 12, value: "wheat", title: "Wheat" }
+        { id: 10, value: "sulfite", title: "Sulfite" }, { id: 11, value: "tree%20nut", title: "Tree Nut" }, { id: 12, value: "wheat", title: "Wheat" }
     ]
 
     const mealTypeOptions: { id: number, value: string, title: string }[] = [
-        { id: 1, value: "main course", title: "Main Course" }, { id: 2, value: "side dish", title: "Side Dish" }, { id: 3, value: "dessert", title: "Dessert" },
+        { id: 1, value: "main%20course", title: "Main Course" }, { id: 2, value: "side%20dish", title: "Side Dish" }, { id: 3, value: "dessert", title: "Dessert" },
         { id: 4, value: "appetizer", title: "Appetizer" }, { id: 5, value: "breakfast", title: "Breakfast" }, { id: 6, value: "fingerfood", title: "Fingerfood" },
         { id: 7, value: "snack", title: "Snack" },
     ]
@@ -163,7 +156,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                         </div>
                     ))}
                 </div>
-                
+
                 <h3 className='font-semibold pt-4 text-lg'>Diet:</h3>
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {dietOptions.map((i) => (

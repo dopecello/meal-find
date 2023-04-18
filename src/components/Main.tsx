@@ -76,17 +76,10 @@ const Main = () => {
                         <h1 className='flex justify-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
                     </div>
                     <div>
-                        <CheckedSelect onSelectedValuesChanged={
-                            function (values: {
-                                cuisines: string[]; diets: string[]; intolerances: string[];
-                                mealTypes: string[]; maxReadyTime?: number | undefined;
-                                maxCalories?: number | undefined
-                            }): void {
-                                throw new Error('Function not implemented.')
-                            }} />
+                        <CheckedSelect onSelectedValuesChanged={(values) => { console.log(values) }} />
                     </div>
                     <div className='flex justify-center pt-4'>
-                        <button onClick={() => { getSomething(); handleFoodSearch(); }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
+                        <button onClick={() => { handleFoodSearch() }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
                     </div>
                 </div>
             </div>
