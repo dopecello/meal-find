@@ -5,4 +5,5 @@ type SelectedVals = {
     mealTypes: string[];
     maxReadyTime?: number;
     maxCalories?: number;
+    query?: string;
   };

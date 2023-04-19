@@ -8,6 +8,7 @@ interface CheckedSelectProps {
         mealTypes: string[];
         maxReadyTime?: number;
         maxCalories?: number;
+        query?: string;
     }) => void;
 }
 
@@ -21,6 +22,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     const [isMaxReadyEnabled, setIsMaxReadyEnabled] = useState<boolean>(false);
     const [maxCalories, setmaxCalories] = useState<number>()
     const [isMaxCaloriesEnabled, setIsMaxCaloriesEnabled] = useState<boolean>(false);
+    const [query, setQuery] = useState<string>('');
 
 
     useEffect(() => {
@@ -32,12 +34,15 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                 mealTypes: Object.keys(selectedMealTypes).filter((key) => selectedMealTypes[key]),
                 maxReadyTime: isMaxReadyEnabled ? maxReadyTime : undefined,
                 maxCalories: isMaxCaloriesEnabled ? maxCalories : undefined,
+                query: query
             });
         };
         reportSelectedValues();
-    }, [selectedCuisines, selectedDiets, selectedIntolerances, selectedMealTypes, isMaxReadyEnabled, maxReadyTime, isMaxCaloriesEnabled, maxCalories, onSelectedValuesChanged]);
-    // For now, this works, but while dealing with this I saw a use case for useCallBack. I will have to look into that.
-
+    }, [selectedCuisines, selectedDiets, selectedIntolerances, selectedMealTypes, isMaxReadyEnabled, maxReadyTime, isMaxCaloriesEnabled, maxCalories, query, onSelectedValuesChanged]);
+    
+    useEffect(() => {
+        console.log('query', query)
+    }, [query])
 
     const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedCuisines((prevSelectedCuisines) => {
@@ -85,7 +90,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
 
     const handleMaxReady = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber;
-        if(isNaN(value)) {
+        if (isNaN(value)) {
             setMaxReadyTime(undefined)
         }
         setMaxReadyTime(value);
@@ -97,7 +102,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
 
     const handleMaxCalories = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.valueAsNumber;
-        if(isNaN(value)) {
+        if (isNaN(value)) {
             setmaxCalories(undefined)
         }
         setmaxCalories(value);
@@ -106,6 +111,10 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     const handleMaxCaloriesEnabler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsMaxCaloriesEnabled(event.target.checked);
     };
+
+    const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value);
+    }
 
     const cuisineOptions: { id: number, value: string, title: string }[] =
         [
@@ -144,6 +153,21 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
     // need to check value inputs because I'm not sure about underscores, hyphens, or just whitespaces. Check before testing.
     return (
         <div className='bg-white px-8 py-6 rounded-lg shadow-md mx-4'>
+            <div className='mb-4 flex justify-center items-center'>
+                <input
+                    type='text'
+                    placeholder='Type in a food...'
+                    className='w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 mr-2'
+                    onChange={handleQuery}
+                />
+                <button
+                    type='button'
+                    className='px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50'
+                    title='Click this to see how many possible recipes you can make with filters you apply.'
+                >
+                    Check Results
+                </button>
+            </div>
             <div className='grid grid-cols-1 gap-2'>
                 <h3 className='font-semibold text-lg'>Cuisines:</h3>
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>

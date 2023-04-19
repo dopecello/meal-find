@@ -10,9 +10,6 @@ import useBodyClass from '@/hooks/useBodyClass'
 
 const Main = () => {
 
-    // Here we will handle the state of the API request. First make a modal where you can select and deselect the amount of queries you can perform. (FoodSelection.tsx)
-    // Save the state using a save button to lock in the API request.
-    // Once the request is made, three cards can be made.(FoodCard.tsx) If the user would like to try a different set, they can press the button and it will retrigger the request.
     const [modal, setModal] = useState(false)
     const [bodyNoScroll, setBodyNoScroll] = useState(false)
     const [selectedValues, setSelectedValues] = useState<SelectedVals>({
@@ -45,6 +42,9 @@ const Main = () => {
 
         let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=3`
 
+        if (selectedValues.query) {
+            apiEndpoint += `&query=${selectedValues.query}`
+        }
         if (selectedValues.cuisines.length > 0) {
             apiEndpoint += `&cuisine=${selectedValues.cuisines.join(',')}`
         }
@@ -72,7 +72,7 @@ const Main = () => {
             console.log(error);
         }
     }
-    //
+    
 
     return (
         <div>
