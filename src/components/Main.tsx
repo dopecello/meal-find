@@ -6,6 +6,8 @@ import Logo from './Logo'
 import axios from 'axios'
 import CheckedSelect from './CheckedSelect'
 import useBodyClass from '@/hooks/useBodyClass'
+import { GrClose } from 'react-icons/gr'
+
 
 
 const Main = () => {
@@ -40,10 +42,17 @@ const Main = () => {
     //TEST API CALL
     const getSomething = async () => {
 
-        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=3`
+        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=111`
 
         if (selectedValues.query) {
             apiEndpoint += `&query=${selectedValues.query}`
+        } else {
+            apiEndpoint += '&query='}
+        if (selectedValues.maxReadyTime) {
+            apiEndpoint += `&maxReadyTime=${selectedValues.maxReadyTime}`
+        }
+        if (selectedValues.maxCalories) {
+            apiEndpoint += `&maxCalories=${selectedValues.maxCalories}`
         }
         if (selectedValues.cuisines.length > 0) {
             apiEndpoint += `&cuisine=${selectedValues.cuisines.join(',')}`
@@ -57,17 +66,13 @@ const Main = () => {
         if (selectedValues.mealTypes.length > 0) {
             apiEndpoint += `&type=${selectedValues.mealTypes.join(',')}`
         }
-        if (selectedValues.maxReadyTime) {
-            apiEndpoint += `&maxReadyTime=${selectedValues.maxReadyTime}`
-        }
-        if (selectedValues.maxCalories) {
-            apiEndpoint += `&maxCalories=${selectedValues.maxCalories}`
-        }
+       
         console.log(apiEndpoint)
 
         try {
             const response = await axios.get(apiEndpoint);
             console.log(response);
+            console.log(response.data.totalResults)
         } catch (error) {
             console.log(error);
         }
@@ -85,8 +90,8 @@ const Main = () => {
                     </div>
                     <Logo />
                 </div>
-                <div className='flex justify-center items-center rounded-lg p-2 border-4 border-black max-w-[200px] mx-auto cursor-pointer bg-dark-green'>
-                    <p onClick={handleFoodSearch} className='font-semibold text-white'>Search Recipes</p>
+                <div className='flex justify-center items-center rounded-lg p-2 border-4 border-black max-w-[200px] mx-auto cursor-pointer bg-dark-green' onClick={handleFoodSearch}>
+                    <p className='font-semibold text-white'>Search Recipes</p>
                 </div>
             </div>
             <div>
@@ -105,8 +110,12 @@ const Main = () => {
             {/* modal */}
             <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : 'hidden'}>
                 <div className='bg-white/70 w-full h-screen overflow-auto max-h-screen py-4'>
-                    <div className='flex justify-center mb-4 text-white'>
+                    <div className='flex justify-between items-center mb-4 text-white'>
+                        <div> {/*Spacer div*/} </div>
                         <h1 className='flex justify-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
+                        <div>
+                            <GrClose onClick={handleFoodSearch} size={40} className='cursor-pointer mr-[2rem] p-2 border-2 bg-white/70 rounded-full' />
+                        </div>
                     </div>
                     <div>
                         <CheckedSelect onSelectedValuesChanged={onSelectedValuesChanged} />

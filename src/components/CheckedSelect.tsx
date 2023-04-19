@@ -15,6 +15,7 @@ interface CheckedSelectProps {
 const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }) => {
 
     const [selectedCuisines, setSelectedCuisines] = useState<Record<string, boolean>>({});
+    const [areAllCuisinesSelected, setAreAllCuisinesSelected] = useState(false);
     const [selectedDiets, setSelectedDiets] = useState<Record<string, boolean>>({});
     const [selectedIntolerances, setSelectedIntolerances] = useState<Record<string, boolean>>({});
     const [selectedMealTypes, setSelectedMealTypes] = useState<Record<string, boolean>>({});
@@ -39,10 +40,6 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
         };
         reportSelectedValues();
     }, [selectedCuisines, selectedDiets, selectedIntolerances, selectedMealTypes, isMaxReadyEnabled, maxReadyTime, isMaxCaloriesEnabled, maxCalories, query, onSelectedValuesChanged]);
-    
-    useEffect(() => {
-        console.log('query', query)
-    }, [query])
 
     const handleCuisines = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedCuisines((prevSelectedCuisines) => {
@@ -53,6 +50,17 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
             return newSelectedCuisines;
         })
 
+    };
+
+    const toggleSelectAllCuisines = () => {
+        setAreAllCuisinesSelected(!areAllCuisinesSelected);
+        setSelectedCuisines((prevSelectedCuisines) => {
+            const newSelectedCuisines = { ...prevSelectedCuisines };
+            cuisineOptions.forEach((option) => {
+                newSelectedCuisines[option.value] = !areAllCuisinesSelected;
+            });
+            return newSelectedCuisines;
+        });
     };
 
     const handleDiets = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,18 +124,17 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
         setQuery(event.target.value);
     }
 
-    const cuisineOptions: { id: number, value: string, title: string }[] =
-        [
-            { id: 1, value: "african", title: "African" }, { id: 2, value: "american", title: "American" }, { id: 3, value: "british", title: "British" },
-            { id: 4, value: "cajun", title: "Cajun" }, { id: 5, value: "caribbean", title: "Caribbean" }, { id: 6, value: "chinese", title: "Chinese" },
-            { id: 7, value: "eastern%20european", title: "Eastern European" }, { id: 8, value: "european", title: "European" }, { id: 9, value: "french", title: "French" },
-            { id: 10, value: "german", title: "German" }, { id: 11, value: "greek", title: "Greek" }, { id: 12, value: "indian", title: "Indian" },
-            { id: 13, value: "irish", title: "Irish" }, { id: 14, value: "italian", title: "Italian" }, { id: 15, value: "japanese", title: "Japanese" },
-            { id: 16, value: "jewish", title: "Jewish" }, { id: 17, value: "korean", title: "Korean" }, { id: 18, value: "latin%20american", title: "Latin American" },
-            { id: 19, value: "mediterranean", title: "Mediterranean" }, { id: 20, value: "mexican", title: "Mexican" }, { id: 21, value: "middle%20eastern", title: "Middle Eastern" },
-            { id: 22, value: "nordic", title: "Nordic" }, { id: 23, value: "southern", title: "Southern" }, { id: 24, value: "spanish", title: "Spanish" },
-            { id: 25, value: "thai", title: "Thai" }, { id: 26, value: "vietnamese", title: "Vietnamese" },
-        ]
+    const cuisineOptions: { id: number, value: string, title: string }[] = [
+        { id: 1, value: "african", title: "African" }, { id: 2, value: "american", title: "American" }, { id: 3, value: "british", title: "British" },
+        { id: 4, value: "cajun", title: "Cajun" }, { id: 5, value: "caribbean", title: "Caribbean" }, { id: 6, value: "chinese", title: "Chinese" },
+        { id: 7, value: "eastern%20european", title: "Eastern European" }, { id: 8, value: "european", title: "European" }, { id: 9, value: "french", title: "French" },
+        { id: 10, value: "german", title: "German" }, { id: 11, value: "greek", title: "Greek" }, { id: 12, value: "indian", title: "Indian" },
+        { id: 13, value: "irish", title: "Irish" }, { id: 14, value: "italian", title: "Italian" }, { id: 15, value: "japanese", title: "Japanese" },
+        { id: 16, value: "jewish", title: "Jewish" }, { id: 17, value: "korean", title: "Korean" }, { id: 18, value: "latin%20american", title: "Latin American" },
+        { id: 19, value: "mediterranean", title: "Mediterranean" }, { id: 20, value: "mexican", title: "Mexican" }, { id: 21, value: "middle%20eastern", title: "Middle Eastern" },
+        { id: 22, value: "nordic", title: "Nordic" }, { id: 23, value: "southern", title: "Southern" }, { id: 24, value: "spanish", title: "Spanish" },
+        { id: 25, value: "thai", title: "Thai" }, { id: 26, value: "vietnamese", title: "Vietnamese" },
+    ]
 
     const dietOptions: { id: number, value: string, title: string }[] = [
         { id: 1, value: "gluten%20free", title: "Gluten-Free" }, { id: 2, value: "ketogenic", title: "Ketogenic" }, { id: 3, value: "vegetarian", title: "Vegetarian" },
@@ -169,7 +176,12 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                 </button>
             </div>
             <div className='grid grid-cols-1 gap-2'>
-                <h3 className='font-semibold text-lg'>Cuisines:</h3>
+                <div className='flex items-center'>
+                    <h3 className='font-semibold text-lg'>Cuisines:</h3>
+                    <button onClick={toggleSelectAllCuisines} className='px-4 py-2 ml-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50'>
+                        {areAllCuisinesSelected ? 'Deselect All' : 'Select All'}
+                    </button>
+                </div>
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
                     {cuisineOptions.map((i) => (
                         <div key={i.id} className='flex items-center mb-2'>
