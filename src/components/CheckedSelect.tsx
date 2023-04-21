@@ -263,7 +263,7 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                     <div>
                         {/* spacer div */}
                     </div>
-                    <div className='xl:col-start-2'>
+                    <div className='xl:col-start-2 sm:col-start-1'>
                         <h3 className='font-semibold mb-2'>Maximum Preparation Time &#40;mins&#41;:</h3>
                         <input
                             type="checkbox"

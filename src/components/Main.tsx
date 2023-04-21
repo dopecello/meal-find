@@ -7,6 +7,7 @@ import axios from 'axios'
 import CheckedSelect from './CheckedSelect'
 import useBodyClass from '@/hooks/useBodyClass'
 import { GrClose } from 'react-icons/gr'
+import FoodCard from './FoodCard'
 
 
 
@@ -22,6 +23,7 @@ const Main = () => {
         maxReadyTime: undefined,
         maxCalories: undefined,
     })
+    const [apiData, setApiData] = useState<Recipe[]>([])
 
 
     const handleFoodSearch = () => {
@@ -39,10 +41,9 @@ const Main = () => {
         setSelectedValues(values);
     }, []);
 
-    //TEST API CALL
     const getSomething = async () => {
 
-        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=111`
+        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=6`
 
         if (selectedValues.query) {
             apiEndpoint += `&query=${selectedValues.query}`
@@ -74,6 +75,7 @@ const Main = () => {
             const response = await axios.get(apiEndpoint);
             console.log(response);
             console.log(response.data.totalResults)
+            setApiData(response.data.results)
         } catch (error) {
             console.log(error);
         }
@@ -92,9 +94,9 @@ const Main = () => {
                         </div>
                         <Logo />
                     </div>
-                    <div className='flex justify-center items-center rounded-lg p-2 border-4 border-black max-w-[200px] mx-auto cursor-pointer bg-dark-green' onClick={handleFoodSearch}>
-                        <p className='font-semibold text-white'>Search Recipes</p>
-                    </div>
+                </div>
+                <div className='flex justify-center items-center rounded-lg p-2 border-4 border-black max-w-[200px] mx-auto cursor-pointer bg-dark-green' onClick={handleFoodSearch}>
+                    <p className='font-semibold text-white'>Search Recipes</p>
                 </div>
                 <div className='relative'>
                     <Image
@@ -115,86 +117,11 @@ const Main = () => {
                 <div className='w-full max-w-7xl'>
                     <h3 className='text-center text-white mb-8'>Your Results</h3>
                     <div className='w-full grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                        {/* Card component */}
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Add more cards here */}
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
-                            <h1 className='text-xl font-semibold mb-2'>Recipe 1</h1>
-                            <Image src={'/'} className='w-full h-40 object-cover rounded-md mb-4' height={160} width={160} alt='placeholder' />
-                            <p className='text-gray-700 text-sm flex-grow mb-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex libero vitae reiciendis suscipit nobis odit et sequi! Laborum in minus sint sequi cumque, deserunt deleniti excepturi illum inventore, expedita animi.</p>
-                            <div className='flex justify-between'>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>View Recipe</p>
-                                </div>
-                                <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
-                                    <p>Search Similar</p>
-                                </div>
-                            </div>
-                        </div>
+                        {apiData ? (
+                            <FoodCard data={apiData} />
+                        ) : (
+                            <p>Loading.... </p>
+                        )}
                     </div>
                 </div>
             </div>
