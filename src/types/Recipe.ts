@@ -11,7 +11,7 @@ interface Recipe {
   readyInMinutes?: number;
   servings?: number;
   sourceUrl: string;
-  summary?: string;
+  summary: string;
   title: string;
   vegan?: boolean;
   vegetarian?: boolean;

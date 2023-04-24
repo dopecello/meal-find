@@ -25,6 +25,7 @@ const recipeResponseHandler = async (req: NextApiRequest, res: NextApiResponse) 
 
   try {
     const response: AxiosResponse<ComplexSearch> = await axios.get(apiEndpoint);
+    console.log(apiEndpoint)
     res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch recipes' });

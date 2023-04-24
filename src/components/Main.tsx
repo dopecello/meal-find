@@ -43,14 +43,21 @@ const Main = () => {
 
     const getSomething = async () => {
         try {
-          const response = await axios.get('/api/recipes', { params: selectedValues });
-          console.log(response);
-          console.log(response.data.totalResults);
-          setApiData(response.data.results);
+            const queryParams = {
+                ...selectedValues,
+                cuisines: selectedValues.cuisines.join(','),
+                diets: selectedValues.diets.join(','),
+                intolerances: selectedValues.intolerances.join(','),
+                mealTypes: selectedValues.mealTypes.join(','),
+            };
+            const response = await axios.get('/api/recipes', { params: queryParams });
+            console.log(response);
+            console.log(response.data.totalResults);
+            setApiData(response.data.results);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
 
     return (
