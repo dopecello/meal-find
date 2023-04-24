@@ -20,4 +20,5 @@ interface Recipe {
 
 interface ComplexSearch {
   results: Recipe[];
+  totalResults: number;
 }

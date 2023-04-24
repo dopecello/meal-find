@@ -42,44 +42,15 @@ const Main = () => {
     }, []);
 
     const getSomething = async () => {
-
-        let apiEndpoint = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&instructionsRequired=true&addRecipeInformation=true&number=6`
-
-        if (selectedValues.query) {
-            apiEndpoint += `&query=${selectedValues.query}`
-        } else {
-            apiEndpoint += '&query='
-        }
-        if (selectedValues.maxReadyTime) {
-            apiEndpoint += `&maxReadyTime=${selectedValues.maxReadyTime}`
-        }
-        if (selectedValues.maxCalories) {
-            apiEndpoint += `&maxCalories=${selectedValues.maxCalories}`
-        }
-        if (selectedValues.cuisines.length > 0) {
-            apiEndpoint += `&cuisine=${selectedValues.cuisines.join(',')}`
-        }
-        if (selectedValues.diets.length > 0) {
-            apiEndpoint += `&diet=${selectedValues.diets.join(',')}`
-        }
-        if (selectedValues.intolerances.length > 0) {
-            apiEndpoint += `&intolerances=${selectedValues.intolerances.join(',')}`
-        }
-        if (selectedValues.mealTypes.length > 0) {
-            apiEndpoint += `&type=${selectedValues.mealTypes.join(',')}`
-        }
-
-        console.log(apiEndpoint)
-
         try {
-            const response = await axios.get(apiEndpoint);
-            console.log(response);
-            console.log(response.data.totalResults)
-            setApiData(response.data.results)
+          const response = await axios.get('/api/recipes', { params: selectedValues });
+          console.log(response);
+          console.log(response.data.totalResults);
+          setApiData(response.data.results);
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    }
+      };
 
 
     return (
