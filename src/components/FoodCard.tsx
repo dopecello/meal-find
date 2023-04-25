@@ -12,7 +12,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ data }) => {
         <>
             {data.map((recipe, index) => {
                 return (
-                    <div key={index} className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-4'>
+                    <div key={index} className='bg-white shadow-md rounded-lg p-4 flex flex-col mx-9 max-h-[500px] overflow-y-auto'>
                         <h1 className='text-xl font-semibold mb-2 text-center'>{recipe.title}</h1>
                         {recipe.image && (
                             <Image

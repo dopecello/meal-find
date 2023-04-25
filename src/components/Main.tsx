@@ -9,6 +9,8 @@ import useBodyClass from '@/hooks/useBodyClass'
 import { GrClose } from 'react-icons/gr'
 import FoodCard from './FoodCard'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 
 
@@ -36,7 +38,7 @@ const Main = () => {
         const numberOfSlides = apiData.length;
         const step = 3; // the number of cards displayed per slide
         if (direction === "next") {
-            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);        
+            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);
         } else if (direction === "prev") {
             setCurrentSlide((prevSlide) => {
                 const newSlide = prevSlide - step;
@@ -106,30 +108,65 @@ const Main = () => {
             </div>
 
             {/* Cards */}
-            <div className='w-full bg-dark-green flex flex-col items-center justify-center overflow-auto pb-4'>
-                <div className='w-full max-w-7xl'>
-                    <h3 className='text-center text-white mb-8'>Your Results</h3>
-                    <div className='w-full flex justify-between items-center'>
-                        <button
-                            onClick={() => handleSlideNavigation("prev")}
-                            className="cursor-pointer p-2 bg-white rounded-full"
+            <div className="w-full bg-dark-green flex flex-col items-center justify-center overflow-hidden pb-4" id="cards">
+                <div className="flex justify-between items-center m-auto max-w-[90%] pt-8">
+                    <div className="w-full">
+                        <h3 className="text-center text-white mb-8">Your Results</h3>
+                        <Carousel
+                            additionalTransfrom={0}
+                            arrows
+                            autoPlaySpeed={3000}
+                            centerMode={false}
+                            className=""
+                            containerClass="container"
+                            customLeftArrow={<button className="absolute left-0 z-10 cursor-pointer p-2 bg-white rounded-full"><AiOutlineLeft /></button>}
+                            customRightArrow={<button className="absolute right-0 z-10 cursor-pointer p-2 bg-white rounded-full"><AiOutlineRight /></button>}
+                            dotListClass=""
+                            draggable
+                            focusOnSelect={false}
+                            infinite
+                            itemClass=""
+                            keyBoardControl
+                            minimumTouchDrag={80}
+                            renderButtonGroupOutside={false}
+                            renderDotsOutside={false}
+                            responsive={{
+                                desktop: {
+                                    breakpoint: {
+                                        max: 3000,
+                                        min: 1024,
+                                    },
+                                    items: 3,
+                                    partialVisibilityGutter: 40,
+                                },
+                                mobile: {
+                                    breakpoint: {
+                                        max: 464,
+                                        min: 0,
+                                    },
+                                    items: 1,
+                                    partialVisibilityGutter: 30,
+                                },
+                                tablet: {
+                                    breakpoint: {
+                                        max: 1024,
+                                        min: 464,
+                                    },
+                                    items: 1,
+                                    partialVisibilityGutter: 30,
+                                },
+                            }}
+                            showDots={false}
+                            sliderClass=""
+                            slidesToSlide={1}
+                            swipeable
                         >
-                            <AiOutlineLeft />
-                        </button>
-                        <div className='w-full grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                            {apiData
-                                .slice(currentSlide, currentSlide + 3)
-                                .map((recipe, index) => (
+                            {apiData.map((recipe, index) => (
+                                <div key={index} className="w-full p-2">
                                     <FoodCard key={index} data={[recipe]} />
-                                ))
-                            }
-                        </div>
-                        <button
-                            onClick={() => handleSlideNavigation("next")}
-                            className='cursor-pointer p-2 bg-white rounded-full'
-                        >
-                            <AiOutlineRight />
-                        </button>
+                                </div>
+                            ))}
+                        </Carousel>
                     </div>
                 </div>
             </div>
