@@ -5,7 +5,7 @@ import foodMobile from '../../public/images/cutout-food.png'
 import Logo from './Logo'
 import axios from 'axios'
 import CheckedSelect from './CheckedSelect'
-import useBodyClass from '@/hooks/useBodyClass'
+import useBodyClass from '../hooks/useBodyClass'
 import { GrClose } from 'react-icons/gr'
 import FoodCard from './FoodCard'
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
@@ -74,10 +74,13 @@ const Main = () => {
             setTotalResults(response.data.totalResults);
             if (response.data.totalResults === 0) {
                 setSearchWarning(true)
+                return false
             }
             setApiData(response.data.results);
+            return true
         } catch (error) {
             console.log(error);
+            return false
         }
     };
 
@@ -142,7 +145,7 @@ const Main = () => {
                                 desktop: {
                                     breakpoint: {
                                         max: 3000,
-                                        min: 1024,
+                                        min: 1080,
                                     },
                                     items: 3,
                                     partialVisibilityGutter: 40,
@@ -157,7 +160,7 @@ const Main = () => {
                                 },
                                 tablet: {
                                     breakpoint: {
-                                        max: 1024,
+                                        max: 1080,
                                         min: 464,
                                     },
                                     items: 1,
@@ -194,10 +197,8 @@ const Main = () => {
                     </div>
                     <div className='flex justify-center pt-4'>
                         <button onClick={async () => {
-                            await getSomething();
-                            if (apiData.length === 0) {
-                                return
-                            } else {
+                            const hasResults = await getSomething();
+                            if (hasResults) {
                                 handleFoodSearch();
                             }
                         }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
