@@ -32,12 +32,11 @@ const Main = () => {
         setModal(!modal)
     }
 
-    const handleSlideNavigation = (direction: string) => {
+    const handleSlideNavigation = (direction: "prev" | "next") => {
         const numberOfSlides = apiData.length;
         const step = 3; // the number of cards displayed per slide
-
         if (direction === "next") {
-            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);
+            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);        
         } else if (direction === "prev") {
             setCurrentSlide((prevSlide) => {
                 const newSlide = prevSlide - step;
