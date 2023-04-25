@@ -27,7 +27,9 @@ const Main = () => {
         maxCalories: undefined,
     })
     const [apiData, setApiData] = useState<Recipe[]>([])
+    const [totalResults, setTotalResults] = useState(0)
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [searchWarning, setSearchWarning] = useState(false)
 
 
     const handleFoodSearch = () => {
@@ -69,7 +71,10 @@ const Main = () => {
             };
             const response = await axios.get('/api/recipes', { params: queryParams });
             console.log(response);
-            console.log(response.data.totalResults);
+            setTotalResults(response.data.totalResults);
+            if (response.data.totalResults === 0) {
+                setSearchWarning(true)
+            }
             setApiData(response.data.results);
         } catch (error) {
             console.log(error);
@@ -108,10 +113,13 @@ const Main = () => {
             </div>
 
             {/* Cards */}
-            <div className="w-full bg-dark-green flex flex-col items-center justify-center overflow-hidden pb-4" id="cards">
+            <div className={apiData.length !== 0 ? "w-full bg-dark-green flex flex-col items-center justify-center overflow-hidden pb-4" : "hidden"} id="cards">
                 <div className="flex justify-between items-center m-auto max-w-[90%] pt-8">
                     <div className="w-full">
-                        <h3 className="text-center text-white mb-8">Your Results</h3>
+                        <h3 className={apiData.length !== 0 ? 'text-center text-white mb-8' : 'hidden'}>{totalResults > 100
+                            ? `You got back ${totalResults} results! Try to limit your search because the API only returns 100 results 😋`
+                            : `You got back ${totalResults} results!`}
+                        </h3>
                         <Carousel
                             additionalTransfrom={0}
                             arrows
@@ -187,9 +195,14 @@ const Main = () => {
                     <div className='flex justify-center pt-4'>
                         <button onClick={async () => {
                             await getSomething();
-                            handleFoodSearch();
+                            if (apiData.length === 0) {
+                                return
+                            } else {
+                                handleFoodSearch();
+                            }
                         }} className='p-2 border rounded-lg w-1/2 bg-black text-white'>Done</button>
                     </div>
+                    <span className={searchWarning ? 'text-red-500 text-sm font-semibold text-center flex justify-center' : 'hidden'}>Whoops! You got nothing! Try broadening your search.</span>
                 </div>
             </div>
         </div>

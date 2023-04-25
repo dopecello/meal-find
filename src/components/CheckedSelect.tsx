@@ -164,16 +164,9 @@ const CheckedSelect: React.FC<CheckedSelectProps> = ({ onSelectedValuesChanged }
                 <input
                     type='text'
                     placeholder='Type in a food...'
-                    className='w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 mr-2'
+                    className='w-3/4 lg:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 mr-2'
                     onChange={handleQuery}
                 />
-                <button
-                    type='button'
-                    className='px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50'
-                    title='Click this to see how many possible recipes you can make with filters you apply.'
-                >
-                    Check Results
-                </button>
             </div>
             <div className='grid grid-cols-1 gap-2'>
                 <div className='flex items-center'>
