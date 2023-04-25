@@ -8,6 +8,7 @@ import CheckedSelect from './CheckedSelect'
 import useBodyClass from '@/hooks/useBodyClass'
 import { GrClose } from 'react-icons/gr'
 import FoodCard from './FoodCard'
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai'
 
 
 
@@ -24,11 +25,26 @@ const Main = () => {
         maxCalories: undefined,
     })
     const [apiData, setApiData] = useState<Recipe[]>([])
+    const [currentSlide, setCurrentSlide] = useState(0);
 
 
     const handleFoodSearch = () => {
         setModal(!modal)
     }
+
+    const handleSlideNavigation = (direction: string) => {
+        const numberOfSlides = apiData.length;
+        const step = 3; // the number of cards displayed per slide
+
+        if (direction === "next") {
+            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);
+        } else if (direction === "prev") {
+            setCurrentSlide((prevSlide) => {
+                const newSlide = prevSlide - step;
+                return newSlide < 0 ? numberOfSlides + newSlide : newSlide;
+            });
+        }
+    };
 
     useEffect(() => {
         setBodyNoScroll(modal)
@@ -94,12 +110,27 @@ const Main = () => {
             <div className='w-full bg-dark-green flex flex-col items-center justify-center overflow-auto pb-4'>
                 <div className='w-full max-w-7xl'>
                     <h3 className='text-center text-white mb-8'>Your Results</h3>
-                    <div className='w-full grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                        {apiData ? (
-                            <FoodCard data={apiData} />
-                        ) : (
-                            <p>Loading.... </p>
-                        )}
+                    <div className='w-full flex justify-between items-center'>
+                        <button
+                            onClick={() => handleSlideNavigation("prev")}
+                            className="cursor-pointer p-2 bg-white rounded-full"
+                        >
+                            <AiOutlineLeft />
+                        </button>
+                        <div className='w-full grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                            {apiData
+                                .slice(currentSlide, currentSlide + 3)
+                                .map((recipe, index) => (
+                                    <FoodCard key={index} data={[recipe]} />
+                                ))
+                            }
+                        </div>
+                        <button
+                            onClick={() => handleSlideNavigation("next")}
+                            className='cursor-pointer p-2 bg-white rounded-full'
+                        >
+                            <AiOutlineRight />
+                        </button>
                     </div>
                 </div>
             </div>
