@@ -1,12 +1,22 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import axios from 'axios'
 
 interface FoodCardProps {
     data: Recipe[]
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({ data }) => {
+
+    const searchSimilarRecipes = async (recipeId: number) => {
+        try {
+            const response = await axios.get(`/api/similarRecipes/?id=${recipeId}`)
+            console.log(response)
+        } catch (error) {
+            console.error('Error searching similar recipes:', error)
+        }
+    }
 
     return (
         <>
@@ -30,7 +40,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ data }) => {
                                     <p>View Recipe</p>
                                 </Link>
                             </div>
-                            <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
+                            <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer' onClick={() => searchSimilarRecipes(recipe.id)}>
                                 <p>Search Similar</p>
                             </div>
                         </div>

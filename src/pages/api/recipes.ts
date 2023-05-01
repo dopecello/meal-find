@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios, { AxiosResponse } from 'axios';
 
-
-const recipeResponseHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const recipeResponseHandler = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
   const {
     query,
     maxReadyTime,

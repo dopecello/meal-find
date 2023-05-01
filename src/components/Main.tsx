@@ -28,26 +28,12 @@ const Main = () => {
     })
     const [apiData, setApiData] = useState<Recipe[]>([])
     const [totalResults, setTotalResults] = useState(0)
-    const [currentSlide, setCurrentSlide] = useState(0);
     const [searchWarning, setSearchWarning] = useState(false)
 
 
     const handleFoodSearch = () => {
         setModal(!modal)
     }
-
-    const handleSlideNavigation = (direction: "prev" | "next") => {
-        const numberOfSlides = apiData.length;
-        const step = 3; // the number of cards displayed per slide
-        if (direction === "next") {
-            setCurrentSlide((prevSlide) => (prevSlide + step) % numberOfSlides);
-        } else if (direction === "prev") {
-            setCurrentSlide((prevSlide) => {
-                const newSlide = prevSlide - step;
-                return newSlide < 0 ? numberOfSlides + newSlide : newSlide;
-            });
-        }
-    };
 
     useEffect(() => {
         setBodyNoScroll(modal)

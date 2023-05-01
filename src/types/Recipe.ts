@@ -6,6 +6,7 @@ interface Recipe {
   diets?: string[];
   dishTypes?: string[];
   glutenFree?: boolean;
+  id: number;
   image?: string;
   lowFodmap?: boolean;
   readyInMinutes?: number;
