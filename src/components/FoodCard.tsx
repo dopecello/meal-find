@@ -34,14 +34,11 @@ const FoodCard: React.FC<FoodCardProps> = ({ data }) => {
                             />
                         )}
                         <p className='text-gray-700 text-sm flex-grow mb-4' id='summary' dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
-                        <div className='flex justify-between'>
+                        <div className='flex justify-center'>
                             <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer'>
                                 <Link href={recipe.sourceUrl} target='_blank' rel='noopener noreferrer'>
                                     <p>View Recipe</p>
                                 </Link>
-                            </div>
-                            <div className='text-indigo-600 font-semibold hover:text-indigo-800 cursor-pointer' onClick={() => searchSimilarRecipes(recipe.id)}>
-                                <p>Search Similar</p>
                             </div>
                         </div>
                     </div>
