@@ -1,38 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Find a Meal
+Welcome to my meal-finding app. The purpose of this app is to provide a user some inspiration for what food they want to eat based on a number of different parameters.
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+## Local Setup
+First, clone the repository into a directory of your choice using `git clone`.
+- Then, install dependencies using `npm install` in the root directory.
+- Create an API Key, then create a `.env` fil in the root directory as so:
 ```
+API_KEY=<your_api_key_combo>
+```
+- Test the connection to the API by running the development server using `npm run dev`. Click "Search Recipes" and query the word "Pizza" with no selections. 
+- A successful connection is established if you get a result back with an array of cards on a carousel, followed by an image of the recipe, a description, and a link the the recipe itself.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to find a meal using the app
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### Using a general query
+You are able to search recipes without any further filtering. All you have to do is go the the search bar where it says "Type in a food...", type in a type of food (ie: pasta), and hit "Done" at the bottom.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Using a filtered query
+You can choose to enter in a type of food, or just search for recipes by simply checking off different parameters given to you in the menu. The API will select a number of foods based on the amount of filters you put on it. Careful to not make your search ultra-specific, or else an error message will show, encrouraging you to broaden your search.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Welcome contributions and features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Search by ingredients**: there is an endpoint for this on the [Spoonacular documentation for searching by ingredients](https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients) that somebody has suggested to me personally. I do not think it would be too hard to integrate.
+- **Making grocery lists based off of recipes**: each recipe can theoretically be re-fed back into the API and a rough grocery list can be attained through this search. After a user is done selecting one or more recipes, it is possible to leverage the [OpenAI API](https://openai.com/blog/openai-api) to contruct a prompt that creates a composite grocery list that combines the ingredients of one through all of the recipes. can be exported as a .csv or .txt file.
+- **Using a database to store favorite recipes and grocery lists**: So far, I have integrated [Prisma](https://www.prisma.io/) into the project to act as a connection to a PostgreSQL server. The end goal is to have user be able to save favorite recipes, grocery lists, and search history.
