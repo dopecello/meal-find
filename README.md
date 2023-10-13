@@ -21,6 +21,9 @@ You can choose to enter in a type of food, or just search for recipes by simply 
 
 ## Welcome contributions and features
 
-- **Search by ingredients**: there is an endpoint for this on the [Spoonacular documentation for searching by ingredients](https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients) that somebody has suggested to me personally. I do not think it would be too hard to integrate.
-- **Making grocery lists based off of recipes**: each recipe can theoretically be re-fed back into the API and a rough grocery list can be attained through this search. After a user is done selecting one or more recipes, it is possible to leverage the [OpenAI API](https://openai.com/blog/openai-api) to contruct a prompt that creates a composite grocery list that combines the ingredients of one through all of the recipes. can be exported as a .csv or .txt file.
-- **Using a database to store favorite recipes and grocery lists**: So far, I have integrated [Prisma](https://www.prisma.io/) into the project to act as a connection to a PostgreSQL server. The end goal is to have user be able to save favorite recipes, grocery lists, and search history.
+#### Search by ingredients
+There is an endpoint for this on the [Spoonacular documentation for searching by ingredients](https://spoonacular.com/food-api/docs#Search-Recipes-by-Ingredients) that somebody has suggested to me personally. I do not think it would be too hard to integrate.
+#### Making grocery lists based off of recipes
+Each recipe can theoretically be re-fed back into the API and a rough grocery list can be attained through this search. After a user is done selecting one or more recipes, it is possible to leverage the [OpenAI API](https://openai.com/blog/openai-api) to contruct a prompt that creates a composite grocery list that combines the ingredients of one through all of the recipes. can be exported as a .csv or .txt file.
+#### Using a database to store favorite recipes and grocery lists
+So far, I have integrated [Prisma](https://www.prisma.io/) into the project to act as a connection to a PostgreSQL server. The end goal is to have user be able to save favorite recipes, grocery lists, and search history.
