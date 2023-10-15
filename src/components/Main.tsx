@@ -170,13 +170,9 @@ const Main = () => {
 
             {/* modal */}
             <div className={modal ? 'fixed left-0 top-0 w-full h-screen bg-black/70 z-20' : 'hidden'}>
-                <div className='bg-white/70 w-full h-screen overflow-auto max-h-screen py-4'>
-                    <div className='flex justify-between items-center mb-4 text-white'>
-                        <div> {/*Spacer div*/} </div>
-                        <h1 className='flex justify-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
-                        <div>
-                            <GrClose onClick={handleFoodSearch} size={40} className='cursor-pointer mr-[2rem] p-2 border-2 bg-white/70 rounded-full' />
-                        </div>
+                <div className='bg-lime-200/80 w-full h-screen overflow-auto max-h-screen py-4'>
+                    <div className='flex justify-center items-center mb-4 text-white'>
+                        <h1 className='flex justify-center text-center font-semibold text-lg p-3 border w-1/2 bg-black rounded-lg'>Customize your options</h1>
                     </div>
                     <div>
                         <CheckedSelect onSelectedValuesChanged={onSelectedValuesChanged} />
